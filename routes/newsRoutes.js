@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
 // Modificar noticia
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { title, content, category } = req.body;
+    const { title, body, category } = req.body;
     try {
-        const updatedNews = await News.findByIdAndUpdate(id, { title, content, category }, { new: true });
+        const updatedNews = await News.findByIdAndUpdate(id, { title, body, category }, { new: true });
         res.status(200).json(updatedNews);
     } catch (error) {
         res.status(500).json({ message: 'Error updating news' });
