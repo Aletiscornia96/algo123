@@ -37,11 +37,6 @@ mongoose.connect(MONGO_URL)
 //     res.json({ file: req.file });
 // });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`)
-});
-
-
 // app.use('/news', newsRoutes);
 app.use(
     cors({
@@ -52,7 +47,11 @@ app.use(
 );
 
 app.use(cookieParser());
-
 app.use(express.json());
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`)
+});
+
 
 app.use("/", authRoute);
