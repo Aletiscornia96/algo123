@@ -13,10 +13,8 @@ const path = require('path');
 
 
 // Conectar a MongoDB
-mongoose.connect(MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB is  connected successfully'))
+mongoose.connect(MONGO_URL)
+    .then(() => console.log('MongoDB is  connected successfully'))
     .catch(err => console.error(err));
 
 // Middleware
