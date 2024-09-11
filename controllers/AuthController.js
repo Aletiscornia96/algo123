@@ -6,15 +6,13 @@ module.exports.Signup = async (req, res) => {
     try {
         const { email, password, username, createdAt } = req.body;
 
-        // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        // Hashear la contraseña antes de guardar el usuario
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await User.create({ email, password: hashedPassword, username, createdAt });
+        // Crear el usuario (el middleware `pre-save` se encargará de hashear la contraseña)
+        const user = await User.create({ email, password, username, createdAt });
 
         // Crear el token
         const token = createSecretToken(user._id);
@@ -72,3 +70,4 @@ module.exports.Login = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
