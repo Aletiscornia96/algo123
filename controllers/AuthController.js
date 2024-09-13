@@ -45,10 +45,7 @@ module.exports.Login = async (req, res) => {
         }
 
         // Verificar la contraseña
-        console.log("Contraseña enviada:", password);
-        console.log("Contraseña encriptada:", user.password);
         const auth = await bcrypt.compare(password, user.password);
-        console.log("Resultado de bcrypt.compare:", auth);
 
         if (!auth) {
             console.log("Contraseña incorrecta");
@@ -56,9 +53,7 @@ module.exports.Login = async (req, res) => {
         }
 
         // Crear el token
-        console.log("Generando token...");
         const token = createSecretToken(user._id);
-        console.log("Token generado:", token);
         res.cookie("token", token, {
             withCredentials: true,
             httpOnly: true, // Esto debería ser true por motivos de seguridad
