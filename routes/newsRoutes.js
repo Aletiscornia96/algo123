@@ -2,6 +2,7 @@ const express = require('express');
 const { upload } = require('../config/multerConfig');
 const News = require('../models/News');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Obtener todas las noticias
 router.get('/', async (req, res) => {
@@ -25,14 +26,15 @@ router.get('/:id', async (req, res) => {
 });
 
 // Subir nueva 
-router.post('/', upload.single('mainImage'), async (req, res) => {
-    const { title, body, additionalImages } = req.body;
+router.post('/', authMiddleware, upload.single('mainImage'), async (req, res) => {
+    const { title, body, category, additionalImages } = req.body;
     const mainImage = req.file.path;
 
     const news = new News({
         title,
         body,
         mainImage,
+        category,
         additionalImages: additionalImages ? additionalImages.split(',') : []
     });
 
@@ -45,7 +47,7 @@ router.post('/', upload.single('mainImage'), async (req, res) => {
 });
 
 // Editar noticia 
-router.put('/:id', upload.single('mainImage'), async (req, res) => {
+router.put('/:id', authMiddleware, upload.single('mainImage'), async (req, res) => {
     try {
         const news = await News.findById(req.params.id);
         if (!news) return res.status(404).json({ message: 'Noticia no encontrada' });
@@ -53,6 +55,7 @@ router.put('/:id', upload.single('mainImage'), async (req, res) => {
         // Actualizar campos
         news.title = req.body.title || news.title;
         news.body = req.body.body || news.body;
+        news.category = req.body.category || news.category;
         
         if (req.file) {
             news.mainImage = req.file.path; // Si se sube una nueva imagen
@@ -70,7 +73,7 @@ router.put('/:id', upload.single('mainImage'), async (req, res) => {
 });
 
 // Eliminar noticia
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const news = await News.findById(req.params.id);
         if (!news) return res.status(404).json({ message: 'Noticia no encontrada' });
