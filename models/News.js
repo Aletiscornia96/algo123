@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 
-const NewsSchema = new mongoose.Schema({
+const newsSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    category: { type:String, required: true},
+    body: { type: String, required: true },
     mainImage: { type: String, required: true },
-    body: [{ type: Map, of: String }],
-    createdAt: { type: Date, default: Date.now }
+    category: { type:String, required: true},
+    additionalImages: [String],
+    date: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('News', NewsSchema);
+module.exports = mongoose.model('News', newsSchema);
+

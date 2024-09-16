@@ -4,6 +4,9 @@ const cors = require("cors");
 const app = express();
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/AuthRoute");
+const newsRoutes = require('./routes/newsRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const { upload } = require('./config/multerConfig');
 require("dotenv").config();
 
 const { MONGO_URL, PORT } = process.env;
@@ -32,3 +35,5 @@ app.listen(PORT, () => {
 
 
 app.use("/", authRoute);
+app.use('/api/news', newsRoutes);
+app.use('/api/admin', adminRoutes);
